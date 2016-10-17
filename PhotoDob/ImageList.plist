@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ImageArray</key>
+	<array>
+		<string>photoPrint</string>
+		<string>photoBook</string>
+		<string>colladgePhotoFrame</string>
+		<string>tShirtPrint</string>
+		<string>customPrintedWallpaper</string>
+		<string>rollerBrindesPrinted</string>
+		<string>cushionsPrinted</string>
+		<string>toteBagsPrinted</string>
+	</array>
+	<key>ProductName</key>
+	<array>
+		<string>PHOTO PRINTS</string>
+		<string>PHOTO BOOKS</string>
+		<string>COLLADGE PHOTO FRAME</string>
+		<string>T SHIRT PRINTING</string>
+		<string>CUSTOM PHOTO FRAME</string>
+		<string>ROLLER BLINDES PRINTED</string>
+		<string>CUSIONS PRINTED</string>
+		<string>TOTE BAG PRINTED</string>
+	</array>
+	<key>PHOTO PRINTS</key>
+	<dict>
+		<key>backImage</key>
+		<string>photoPrint</string>
+		<key>SlectASize</key>
+		<dict>
+			<key>sizeName</key>
+			<array>
+				<string>MINI SQUARE</string>
+				<string>4X4 SQUARE</string>
+				<string>5X5 SQUARE</string>
+				<string>MINI PRINTS</string>
+				<string>MIGHTY PRINTS</string>
+				<string>8X10 PRINTS</string>
+				<string>11X14 PRINTS</string>
+				<string>16X20 PRINTS</string>
+				<string>20X30 PRINTS</string>
+			</array>
+			<key>imagesForSelectASize</key>
+			<array>
+				<string>mini-square</string>
+				<string>4X4-square</string>
+				<string>5X5-square</string>
+				<string>mini-prints</string>
+				<string>mighty-prints</string>
+				<string>8X10-prints</string>
+				<string>11X14-prints</string>
+				<string>16X20-prints</string>
+				<string>20X30-prints</string>
+			</array>
+			<key>allImagesForPhotoPrint</key>
+			<array/>
+		</dict>
+	</dict>
+	<key>PHOTO BOOKS</key>
+	<dict>
+		<key>backImage</key>
+		<string>photoBook</string>
+		<key>SlectASize</key>
+		<dict>
+			<key>imagesForSelectASize</key>
+			<array>
+				<string>1</string>
+				<string>2</string>
+				<string>3</string>
+			</array>
+			<key>allImagesForPhotoBook</key>
+			<array>
+				<string>bg2</string>
+				<string>bg3</string>
+				<string>bg4</string>
+			</array>
+		</dict>
+	</dict>
+	<key>COLLADGE PHOTO FRAME</key>
+	<dict>
+		<key>backImage</key>
+		<string>colladgePhotoFrame</string>
+		<key>SlectASize</key>
+		<dict>
+			<key>imagesForSelectASize</key>
+			<array/>
+			<key>allImagesForColladgePhoto</key>
+			<array>
+				<string>bg2</string>
+				<string>bg3</string>
+				<string>bg4</string>
+			</array>
+		</dict>
+	</dict>
+	<key>T SHIRT PRINTING</key>
+	<dict>
+		<key>backImage</key>
+		<string>tShirtPrint</string>
+		<key>SlectASize</key>
+		<dict>
+			<key>imagesForSelectASize</key>
+			<array/>
+			<key>allImagesForTShirtPrint</key>
+			<array>
+				<string>bg2</string>
+				<string>bg3</string>
+				<string>bg4</string>
+			</array>
+		</dict>
+	</dict>
+	<key>CUSTOM PHOTO FRAME</key>
+	<dict>
+		<key>backImage</key>
+		<string>customPrintedWallpaper</string>
+		<key>SlectASize</key>
+		<dict>
+			<key>imagesForSelectASize</key>
+			<array/>
+			<key>allImagesForCustomPrinted</key>
+			<array>
+				<string>bg2</string>
+				<string>bg3</string>
+				<string>bg4</string>
+			</array>
+		</dict>
+	</dict>
+	<key>ROLLER BLINDES PRINTED</key>
+	<dict>
+		<key>backImage</key>
+		<string>rollerBrindesPrinted</string>
+		<key>SlectASize</key>
+		<dict>
+			<key>imagesForSelectASize</key>
+			<array/>
+			<key>allImagesForRollerBlinder</key>
+			<array>
+				<string>bg2</string>
+				<string>bg3</string>
+				<string>bg4</string>
+			</array>
+		</dict>
+	</dict>
+	<key>CUSIONS PRINTED</key>
+	<dict>
+		<key>backImage</key>
+		<string>cushionsPrinted</string>
+		<key>SlectASize</key>
+		<dict>
+			<key>imagesForSelectASize</key>
+			<array/>
+			<key>allImagesForCusionsPrint</key>
+			<array>
+				<string>bg2</string>
+				<string>bg3</string>
+				<string>bg4</string>
+			</array>
+		</dict>
+	</dict>
+	<key>TOTE BAG PRINTED</key>
+	<dict>
+		<key>backImage</key>
+		<string>toteBagsPrinted</string>
+		<key>SlectASize</key>
+		<dict>
+			<key>imagesForSelectASize</key>
+			<array/>
+			<key>allImagesForToteBagPrinted</key>
+			<array>
+				<string>bg2</string>
+				<string>bg3</string>
+				<string>bg4</string>
+			</array>
+		</dict>
+	</dict>
+</dict>
+</plist>
