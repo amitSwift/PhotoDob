@@ -8,19 +8,53 @@
 
 import UIKit
 import Photos
+import CoreData
+
+/*enum ViewToCrop {
+    case photoPrint
+    case photoBook
+    case colladgePhotoFrame
+    case tShirtPrint
+    case customPrintedWallpaper
+    case rollerBrindesPrinted
+    case cushionsPrinted
+    case toteBagsPrinted
+}*/
 
 
-class AlbumVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
+class AlbumVC: UIViewController,UITableViewDelegate,UITableViewDataSource ,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    
+    //MARK: Variables
     var imageAlbum = NSMutableArray()
-    
     var imageDict = NSMutableDictionary()
-    
     var fetchResults: [PHFetchResult<PHAssetCollection>] = []
+    
+    var indexPathValue = NSInteger()
+    var indexSectionValue = NSInteger()
+    var imageCount = NSInteger()
+    
+    var productName = String()
+    
+    var picker:UIImagePickerController?=UIImagePickerController()
+    var popover:UIPopoverController?=nil
+    
+    //MARK: Outlets
+    
+    @IBOutlet var btnAblumOnly: UIButton!
+    
+    
+    
+    
+    //var season = ViewToCrop.photoPrint //used for crop view
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "0 image selected"
+        self.title = "0 Photos Selected"
+        
+        
+    print(Header.appDelegate.ProductName)
+        
         
       self.navigationController?.isNavigationBarHidden = false
         // Do any additional setup after loading the view.
@@ -32,22 +66,137 @@ class AlbumVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
         
         
         //add right navigation  button
-        var imageInfo = UIImage(named: "tick")
+       /* var imageInfo = UIImage(named: "tick")
         imageInfo = imageInfo?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: imageInfo, style: UIBarButtonItemStyle.plain, target: self, action: #selector(AlbumVC.clickOnTick))
+        */
+        
+        if Header.appDelegate.ProductName == "PHOTO PRINTS" || Header.appDelegate.ProductName == "PHOTOBOOKS" || Header.appDelegate.ProductName == "COLLAGED PHOTO FRAME" || Header.appDelegate.ProductName == "TOTE BAG PRINTED"{
+            btnAblumOnly.isHidden = true
+        }
+        else {
+            btnAblumOnly.isHidden = false
+        }
+        
         
 
         self.setupPhotos()
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        
+        
+        DBManager.sharedManager.getSavedArrayFromDataBase( comletionHandler: {(result: [NSManagedObject]) -> Void in
+            print("result is \(result)")
+            self.imageCount = result.count
+            self.title = "\(result.count) Photos Selected"
+            }, andFalure: {(fail: Int) -> Void in
+                print("fail is \(fail)")
+                self.title = "0 Photos Selected"
+                self.imageCount = 0
+        })
+    }
+    
     func returntoView() {
         _ = navigationController?.popViewController(animated: true)
     }
     
+    //for use save value in database
     func clickOnTick() {
         
+        if(self.imageCount>0){
+            
+           /*
+            self.returnProductType(productname: Header.appDelegate.ProductName) //change enum type
+           
+            switch season {
+            case .photoPrint:
+                let cropVC = storyBoard.instantiateViewController(withIdentifier: "TapToCrop") as! TapToCrop
+                self.navigationController?.pushViewController(cropVC, animated: true)
+                
+            case .photoBook:
+                let photoBookVC = storyBoard.instantiateViewController(withIdentifier: "PhotoBookVC") as! PhotoBookVC
+                self.navigationController?.pushViewController(photoBookVC, animated: true)
+                
+            case .colladgePhotoFrame:
+                let colladgePhotoFrameVC = storyBoard.instantiateViewController(withIdentifier: "ColladgePhotoFrameVC") as! ColladgePhotoFrameVC
+                self.navigationController?.pushViewController(colladgePhotoFrameVC, animated: true)
+                
+            case .tShirtPrint:
+                print("tShirtPrint")
+            case .customPrintedWallpaper:
+                print("customPrintedWallpaper")
+            case .rollerBrindesPrinted:
+                print("rollerBrindesPrinted")
+            case .cushionsPrinted:
+                print("cushionsPrinted")
+            case .toteBagsPrinted:
+                print("toteBagsPrinted")
+            default:
+                print("Climate is not predictable")
+            }
+            */
+            
+            
+            //PhotoBookCell
+            
+           
+            
+            
+            
+            
+        }else{
+            let alert = UIAlertController(title: "Alert", message: "Please select images!", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
        
+            
+        
+            
+           
+            
+            
+            // used for saving
+            
+//             let imageArray = UserDefaults.standard.value(forKey: "selectedImages") as! NSMutableArray
+//            AppManager.sharedManager.saveProductValueInDataBase("PHOTO PRINT", "%X%", imageArray, "0",andCompletionHandler: {(result: Bool) -> Void in
+//                print("result is \(result)")
+//                }, andFalure: {(fail: NSError) -> Void in
+//                    print("fail is \(fail)")
+//            })
+        
+       
+        
+    }
+    
+    func returnProductType(productname:String) -> Void {
+      /*  if(productname == "PHOTO PRINTS"){
+            season = ViewToCrop.photoPrint
+        }
+        else if(productname == "PHOTO BOOKS"){
+            season = ViewToCrop.photoBook
+        }
+        else if(productname == "COLLADGE PHOTO FRAME"){
+            season = ViewToCrop.colladgePhotoFrame
+        }
+        else if(productname == "T SHIRT PRINTING"){
+            season = ViewToCrop.tShirtPrint
+        }
+        else if(productname == "CUSTOM PHOTO FRAME"){
+            season = ViewToCrop.customPrintedWallpaper
+        }
+        else if(productname == "ROLLER BLINDES PRINTED"){
+            season = ViewToCrop.rollerBrindesPrinted
+        }
+        else if(productname == "CUSIONS PRINTED"){
+            season = ViewToCrop.cushionsPrinted
+        }
+        else if(productname == "TOTE BAG PRINTED"){
+            season = ViewToCrop.toteBagsPrinted
+        }*/
     }
     
     private func setupPhotos() {
@@ -88,15 +237,19 @@ class AlbumVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
         let cameraRollResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: fetchOptions)
         
          //Albums fetch result
-        let albumResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptions)
-        fetchResults = [cameraRollResult, albumResult]
+//        let albumResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptions)
+//        fetchResults = [cameraRollResult, albumResult]
+        
+        
+        //AppManager.sharedManager.activateView(self.view, loaderText: "Loading..")
         
         
         
         
-//        let albumResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil)
-//
-//        fetchResults = [albumResult]
+        
+        
+        let albumResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil)
+        fetchResults = [albumResult]
         
     
         
@@ -123,16 +276,45 @@ class AlbumVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     @IBAction func cameraAction(_ sender: AnyObject) {
         
-        let alert = UIAlertController(title: "Alert", message: "Under process!", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
+        picker?.delegate = self
+        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera))
+        {
+            picker!.sourceType = UIImagePickerControllerSourceType.camera
+            self .present(picker!, animated: true, completion: nil)
+        }
+       
+}
     
+    // MARK: - UIImagePickerView Delegates
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
+    {
+        picker .dismiss(animated: true, completion: nil)
+        
+        //FrontImage.image = info[UIImagePickerControllerOriginalImage] as? UIImage
+        
+        
+    }
+    //imgFirst.image=info[UIImagePickerControllerOriginalImage] as? UIImage
+    
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController)
+    {
+        print("picker cancel.")
+        picker .dismiss(animated: true, completion: nil)
+        
+    }
+
+    
+
     
     @IBAction func fotoliaAction(_ sender: AnyObject) {
-        let alert = UIAlertController(title: "Alert", message: "Under process!", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+        
+        let fotoliaVC = storyBoard.instantiateViewController(withIdentifier: "FotoliaVC") as! FotoliaVC
+        self.navigationController?.pushViewController(fotoliaVC, animated: true)
+
+        
+       
     }
     
     
@@ -153,6 +335,7 @@ class AlbumVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
         
         //cell?.textLabel?.text = "WhatsApp Images"
         
+        print(indexPath.section)
         let album = fetchResults[indexPath.section][indexPath.row]
         
         // Title
@@ -211,6 +394,8 @@ class AlbumVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
 //        self.navigationController?.pushViewController(cropVC, animated: true)
         
          let album = fetchResults[indexPath.section][indexPath.row]
+        indexPathValue = indexPath.row
+        indexSectionValue = indexPath.section
          initializePhotosDataSource(album)
         
        /*
@@ -256,7 +441,17 @@ class AlbumVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
         let newDataSource = PhotoCollectionViewDataSource(fetchResult: fetchResult, selections: selections)
                 let photoCollectionVC = storyBoard.instantiateViewController(withIdentifier: "PhotoCollectionVC") as! PhotoCollectionVC
         photoCollectionVC.fetchResult = newDataSource.fetchResult
-                self.navigationController?.pushViewController(photoCollectionVC, animated: true)
+        
+        print(indexPathValue)
+        let album = fetchResults[indexSectionValue][indexPathValue]
+        
+        // Title
+        //used for 
+        photoCollectionVC.albumName = album.localizedTitle!
+        /*let navController = UINavigationController(rootViewController: photoCollectionVC)
+        self.present(navController, animated: true, completion: nil)*/
+        
+        self.navigationController?.pushViewController(photoCollectionVC, animated: true)
       print(fetchResult.count)
     }
     

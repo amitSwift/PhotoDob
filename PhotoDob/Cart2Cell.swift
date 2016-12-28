@@ -10,6 +10,17 @@ import UIKit
 
 class Cart2Cell: UITableViewCell {
 
+    
+    @IBOutlet var imgProduct: UIImageView!
+    @IBOutlet var lblSizeName: UILabel!
+    @IBOutlet var lblQuantity: UILabel!
+    @IBOutlet var lblQty: UILabel!
+    @IBOutlet var lblPrise: UILabel!
+    
+    
+    @IBOutlet var btnPlus: UIButton!
+    @IBOutlet var btnMinus: UIButton!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

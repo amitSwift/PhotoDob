@@ -1,4 +1,4 @@
-//
+ //
 //  AppManager.swift
 //  TableViewDemo
 //
@@ -11,6 +11,7 @@ import UIKit
 import SystemConfiguration
 import Foundation
 import Alamofire
+import CoreData
 
 
 
@@ -19,11 +20,18 @@ public protocol WebServiceDelegate : NSObjectProtocol
      func serverReponse(responseDict: NSDictionary,serviceurl:NSString)
      func failureRsponseError(failureError:NSError)
     
+    //core data
+    
+//    func saveToCoreDataResponse(responseStatus:Bool)
+//    func failToSaveToCoreDataResponse(Error:NSError)
+    
 }
 
 public class AppManager: NSObject {
     
     public var delegate: WebServiceDelegate?
+    
+    var people = [NSManagedObject]()
     
     //********* Make Instance Of class ***********//
     
@@ -181,6 +189,74 @@ public class AppManager: NSObject {
         return result
         
     }
+    
+    
+    //MARK: get document directory Path
+    func getDirectoryPath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+    
+    //MARK: save crop image to document directory
+    func saveImageDocumentDirectory(imageValue:UIImage,albumname:String,indexValue:String){
+        let fileManager = FileManager.default
+        let paths = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent("OLD\(albumname)\(indexValue).png")
+        let image = imageValue as UIImage
+        let imageData = UIImagePNGRepresentation(image)
+        fileManager.createFile(atPath: paths as String, contents: imageData, attributes: nil)
+    }
+    
+    //MARK:fetch Croped images
+    func getCropedImage(_ indexValue:NSInteger,_ albumName:String)->UIImage{
+        let fileManager = FileManager.default
+        let imagePAth = (self.getDirectoryPath() as NSString).appendingPathComponent("\(albumName)\(indexValue).png")
+        
+        if fileManager.fileExists(atPath: imagePAth){
+            print(imagePAth)
+            //self.imageView.image = UIImage(contentsOfFile: imagePAth)
+            
+            
+            return UIImage(contentsOfFile: imagePAth)!
+        }else{
+            print("No Image")
+        }
+        return UIImage(contentsOfFile: imagePAth)!
+    }
+    
+    
+    
+    //MARK:fetch orignal images
+    func getImageByPathOLD(_ imageName:String)->UIImage?{
+        let fileManager = FileManager.default
+        let imagePAth = (self.getDirectoryPath() as NSString).appendingPathComponent("\(imageName).png")
+        
+        if fileManager.fileExists(atPath: imagePAth){
+            print(imagePAth)
+            //self.imageView.image = UIImage(contentsOfFile: imagePAth)
+            
+            
+            return UIImage(contentsOfFile: imagePAth)!
+        }else{
+            print("No Image")
+            
+        }
+        return nil
+        
+    }
+    /*--------------------------------------------------*/
+    //MARK: resize of image
+    func resize(_ theImage: UIImage, theNewSize: CGSize) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(theNewSize, false, 1.0)
+        theImage.draw(in: CGRect(x: CGFloat(0), y: CGFloat(0), width: CGFloat(theNewSize.width), height: CGFloat(theNewSize.height)))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return newImage
+    }
+
+    
+   
+    
     // MARK: Append Base Url & Api URl
     //************ Append Base Url & Api URl ***********//
     
@@ -202,8 +278,11 @@ public class AppManager: NSObject {
     {
         let serverpath: String = self.createServerPath(requestPath: postUrl as String)
         
-        Alamofire.request(serverpath , method: .post , parameters: params as? Parameters).responseJSON { response in
-            print(response.request)  // original URL request
+       
+        
+        Alamofire.request(serverpath , method: .post , parameters: params as? Parameters  , encoding: JSONEncoding(options: [])).responseJSON { response in
+        
+                    print(response.request)  // original URL request
             print(response.response) // HTTP URL response
             print(response.data)     // server data
             print(response.result)   // result of response serialization
@@ -229,11 +308,12 @@ public class AppManager: NSObject {
    
     
     
-    
     public func FetchDatafromServer(params:AnyObject,postUrl:NSString)
     {
      
     }
+    
+    
     
     
 }

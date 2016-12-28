@@ -14,6 +14,7 @@ class PhotoCell: UICollectionViewCell {
     @IBOutlet var btnCheck: UIButton!
     @IBOutlet var imageView: UIImageView!
     
+    @IBOutlet var activitiView: UIActivityIndicatorView!
      var asset: PHAsset?
     
     @IBAction func btnCheckAction(_ sender: UIButton) {

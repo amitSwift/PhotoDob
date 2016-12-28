@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="16A323" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="AlbumTable" syncable="YES">
+        <attribute name="albumName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cropedImageName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageQuantity" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isCroped" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isFromFotolia" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="productName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="productSize" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="selectedImageIndexValue" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="selectImageName" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="CartTable" syncable="YES">
+        <attribute name="albumName" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="amount" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="count" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="primaryKey" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="productImages" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="productName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="quantity" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sizeOfProduct" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Product" syncable="YES">
+        <attribute name="productImages" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="productName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sizeOfProduct" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="AlbumTable" positionX="126" positionY="-315" width="128" height="180"/>
+        <element name="CartTable" positionX="135" positionY="-270" width="128" height="165"/>
+        <element name="Product" positionX="124" positionY="-342" width="128" height="105"/>
+    </elements>
+</model>

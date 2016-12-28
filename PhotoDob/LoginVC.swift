@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoginVC: UIViewController ,WebServiceDelegate{
+class LoginVC: UIViewController ,WebServiceDelegate,UITextFieldDelegate{
 
     
     //MARK: Outlet
@@ -34,7 +34,54 @@ class LoginVC: UIViewController ,WebServiceDelegate{
         btnSignIn.addTarget(self, action: #selector(LoginVC.signInClick), for: .touchUpInside )
         UserDefaults.standard.set(true, forKey: "isSignIn")
         
+        
+        let attr = NSDictionary(object: UIFont(name: "HelveticaNeue-Bold", size: 16.0)!, forKey: NSFontAttributeName as NSCopying)
+        segmentedControl.setTitleTextAttributes(attr as [NSObject : AnyObject] , for: .normal)
+        
+        
+        
+        if DeviceType.IS_IPHONE_6{
+            
+            segmentedControl.frame = CGRect(x: 37, y: 181, width: 300, height: 35)
+            
+        }
+        else  if DeviceType.IS_IPHONE_6P{
+            
+            segmentedControl.frame = CGRect(x: 40, y: 192, width: 339, height: 41)
+            
+        }
+        else  if DeviceType.IS_IPHONE_5{
+            
+            segmentedControl.frame = CGRect(x: 38, y: 150, width: 245, height: 38)
+            
+        }
+        else  if DeviceType.IS_IPHONE_4_OR_LESS{
+           segmentedControl.frame = CGRect(x: 38, y: 150, width: 245, height: 38)
+            
+        }
+        
+        txtEmail.addTarget(self, action: #selector(self.textFieldDidChange), for: .editingChanged)
+        txtPassword.addTarget(self, action: #selector(self.textFieldDidChange), for: .editingChanged)
+
+
+        
+        
+        
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if UserDefaults.standard.value(forKey: "email") != nil
+        {
+            txtEmail.text = UserDefaults.standard.value(forKey: "email")as? String ?? ""
+            txtPassword.text = UserDefaults.standard.value(forKey: "password") as? String ?? ""
+            btnSignIn.isSelected = true
+            btnSignIn.isUserInteractionEnabled = true
+        }else{
+            btnSignIn.isSelected = false
+            btnSignIn.isUserInteractionEnabled = false
+
+        }
     }
     
     func returntoView() {
@@ -57,6 +104,43 @@ class LoginVC: UIViewController ,WebServiceDelegate{
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
         
+    }
+    
+    func textFieldDidChange() {
+        if (AppManager.sharedManager.isValidEmail(emailText: txtEmail.text! as NSString) == true) && (txtPassword.text?.characters.count)! > 5{
+            btnSignIn.isSelected = true
+            btnSignIn.isUserInteractionEnabled = true
+            UserDefaults.standard.set(txtEmail.text, forKey: "email")
+            UserDefaults.standard.set(txtPassword.text, forKey: "password")
+            
+        }else{
+            btnSignIn.isSelected = false
+            btnSignIn.isUserInteractionEnabled = false
+            UserDefaults.standard.removeObject(forKey: "email")
+            UserDefaults.standard.removeObject(forKey: "password")
+        }
+    }
+    
+    //MARK:text field delegate
+    func textFieldDidBeginEditing(_ textField: UITextField) {    //delegate method
+        
+    }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+       
+        
+        return true;
+    }
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {  //delegate method
+        txtEmail.resignFirstResponder()
+        txtPassword.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {   //delegate method
+        textField.resignFirstResponder()
+        
+        return true
     }
     
     
@@ -87,20 +171,34 @@ class LoginVC: UIViewController ,WebServiceDelegate{
     func signInClick ()
     {
         
-            AppManager.sharedManager.delegate=self
-          AppManager.sharedManager.activateView(self.view, loaderText: "Loading")
-        
-        if UserDefaults.standard.bool(forKey: "isSignIn") == true{
-            let params: [String: AnyObject] = ["email": txtEmail.text! as AnyObject, "password": txtPassword.text! as AnyObject,"term": "1" as AnyObject,"device_token" : "skjdhsjdfhsuifdf654vd6f54g665d4f654df564ds5f645ds4f" as AnyObject,"device_type" : "ios" as AnyObject]
+        if txtEmail.text == "" {
+            let alert = UIAlertController(title: "Alert", message: "Please Enter Your Email.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
             
-            AppManager.sharedManager.postDataOnserver(params: params as AnyObject, postUrl: Header.KLogin as NSString)
+        }else if txtPassword.text == "" {
+            let alert = UIAlertController(title: "Alert", message: "Please Enter Your Password.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
         else{
-            let params: [String: AnyObject] = ["email": txtEmail.text! as AnyObject, "password": txtPassword.text! as AnyObject,"term": "1" as AnyObject,"device_token" : "skjdhsjdfhsuifdf654vd6f54g665d4f654df564ds5f645ds4f" as AnyObject,"device_type" : "ios" as AnyObject]
+            AppManager.sharedManager.delegate=self
+            AppManager.sharedManager.activateView(self.view, loaderText: "Loading")
             
-            AppManager.sharedManager.postDataOnserver(params: params as AnyObject, postUrl: Header.KSignUP as NSString)
+            if UserDefaults.standard.bool(forKey: "isSignIn") == true{
+                let params: [String: AnyObject] = ["email": txtEmail.text! as AnyObject, "password": txtPassword.text! as AnyObject,"term": "1" as AnyObject,"device_token" : "skjdhsjdfhsuifdf654vd6f54g665d4f654df564ds5f645ds4f" as AnyObject,"device_type" : "ios" as AnyObject]
+                
+                AppManager.sharedManager.postDataOnserver(params: params as AnyObject, postUrl: Header.KLogin as NSString)
+            }
+            else{
+                let params: [String: AnyObject] = ["email": txtEmail.text! as AnyObject, "password": txtPassword.text! as AnyObject,"term": "1" as AnyObject,"device_token" : "skjdhsjdfhsuifdf654vd6f54g665d4f654df564ds5f645ds4f" as AnyObject,"device_type" : "ios" as AnyObject]
+                
+                AppManager.sharedManager.postDataOnserver(params: params as AnyObject, postUrl: Header.KSignUP as NSString)
+            }
+
         }
-            
+        
+        
         
         
     
@@ -111,19 +209,27 @@ class LoginVC: UIViewController ,WebServiceDelegate{
     
     func serverReponse(responseDict: NSDictionary,serviceurl:NSString)
     {
+        UserDefaults.standard.removeObject(forKey: "email")
+        UserDefaults.standard.removeObject(forKey: "password")
+        
         AppManager.sharedManager.inActivateView(self.view)
         if serviceurl as String == Header.KLogin {
             
-            print(responseDict.value(forKey: "status"))
+           // print(responseDict.value(forKey: "details") as! NSDictionary)
             let result=responseDict.value(forKey: "result")as! Bool
             
             
             if result == true{
-                let alert = UIAlertController(title: "Alert", message: "You have successfully Login!", preferredStyle: UIAlertControllerStyle.alert)
+                
+                let accountVC = storyBoard.instantiateViewController(withIdentifier: "AccountVC") as! AccountVC
+                self.navigationController?.pushViewController(accountVC, animated: true)
+                
+                let alert = UIAlertController(title: "Alert", message: "You have successfully Logged in!", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 
                 UserDefaults.standard.set(true, forKey: "isLogedIn")
+                UserDefaults.standard.set(responseDict.value(forKey: "details"), forKey: "LoginDetailDic")
             }
             else{
                 let alert = UIAlertController(title: "Alert", message: responseDict.value(forKey: "error")as? String, preferredStyle: UIAlertControllerStyle.alert)
@@ -147,9 +253,16 @@ class LoginVC: UIViewController ,WebServiceDelegate{
             
             
             if result == true{
-                let alert = UIAlertController(title: "Alert", message: "You have successfully Registers!", preferredStyle: UIAlertControllerStyle.alert)
+                
+                let accountVC = storyBoard.instantiateViewController(withIdentifier: "AccountVC") as! AccountVC
+                self.navigationController?.pushViewController(accountVC, animated: true)
+                
+                let alert = UIAlertController(title: "Alert", message: "You are successfully registered!", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
+                
+                UserDefaults.standard.set(true, forKey: "isLogedIn")
+                UserDefaults.standard.set(responseDict.value(forKey: "details"), forKey: "LoginDetailDic")
             }
             else{
                 let alert = UIAlertController(title: "Alert", message: responseDict.value(forKey: "error")as? String, preferredStyle: UIAlertControllerStyle.alert)

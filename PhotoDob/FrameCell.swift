@@ -10,7 +10,13 @@ import UIKit
 
 class FrameCell: UITableViewCell {
 
+    @IBOutlet var backImage: UIImageView!
     @IBOutlet var tapPhotoToCrop: UIButton!
+    
+    @IBOutlet var btnUp: UIButton!
+    @IBOutlet var btnDown: UIButton!
+    @IBOutlet var lblQuantity: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

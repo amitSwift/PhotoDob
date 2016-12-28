@@ -27,7 +27,7 @@ class CartVC: UIViewController {
     }
     
     func returntoView() {
-        _ = navigationController?.popViewController(animated: true)
+        _ = navigationController?.popToRootViewController(animated: true)
     }
 
 
@@ -44,7 +44,7 @@ class CartVC: UIViewController {
     
     @IBAction func checkOutAction(_ sender: AnyObject) {
         
-        let alert = UIAlertController(title: "Alert", message: "Under process!", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "Alert", message: "Please Add Atlease One product to the Cart!", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }

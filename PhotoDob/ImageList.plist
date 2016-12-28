@@ -16,13 +16,13 @@
 	<key>ProductName</key>
 	<array>
 		<string>PHOTO PRINTS</string>
-		<string>PHOTO BOOKS</string>
-		<string>COLLADGE PHOTO FRAME</string>
-		<string>T SHIRT PRINTING</string>
+		<string>PHOTOBOOKS</string>
+		<string>COLLAGED PHOTO FRAMES</string>
+		<string>T-SHIRT PRINTING</string>
 		<string>CUSTOM PHOTO FRAME</string>
 		<string>ROLLER BLINDES PRINTED</string>
-		<string>CUSIONS PRINTED</string>
-		<string>TOTE BAG PRINTED</string>
+		<string>CUSHIONS PRINTED</string>
+		<string>TOTE BAGS PRINTED</string>
 	</array>
 	<key>PHOTO PRINTS</key>
 	<dict>
@@ -56,9 +56,75 @@
 			</array>
 			<key>allImagesForPhotoPrint</key>
 			<array/>
+			<key>ActualSizeRatio</key>
+			<dict>
+				<key>MINI SQUARE</key>
+				<dict>
+					<key>width</key>
+					<string>6</string>
+					<key>height</key>
+					<string>6</string>
+				</dict>
+				<key>4X4 SQUARE</key>
+				<dict>
+					<key>width</key>
+					<string>10.2</string>
+					<key>height</key>
+					<string>10.2</string>
+				</dict>
+				<key>5X5 SQUARE</key>
+				<dict>
+					<key>width</key>
+					<string>12.7</string>
+					<key>height</key>
+					<string>12.7</string>
+				</dict>
+				<key>MINI PRINTS</key>
+				<dict>
+					<key>width</key>
+					<string>5.4</string>
+					<key>height</key>
+					<string>8.6</string>
+				</dict>
+				<key>MIGHTY PRINTS</key>
+				<dict>
+					<key>width</key>
+					<string>10.5</string>
+					<key>height</key>
+					<string>15.25</string>
+				</dict>
+				<key>8X10 PRINTS</key>
+				<dict>
+					<key>width</key>
+					<string>20.32</string>
+					<key>height</key>
+					<string>25.4</string>
+				</dict>
+				<key>11X14 PRINTS</key>
+				<dict>
+					<key>width</key>
+					<string>27.94</string>
+					<key>height</key>
+					<string>35.56</string>
+				</dict>
+				<key>16X20 PRINTS</key>
+				<dict>
+					<key>width</key>
+					<string>40.64</string>
+					<key>height</key>
+					<string>50.80</string>
+				</dict>
+				<key>20X30 PRINTS</key>
+				<dict>
+					<key>width</key>
+					<string>50.80</string>
+					<key>height</key>
+					<string>76.20</string>
+				</dict>
+			</dict>
 		</dict>
 	</dict>
-	<key>PHOTO BOOKS</key>
+	<key>PHOTOBOOKS</key>
 	<dict>
 		<key>backImage</key>
 		<string>photoBook</string>
@@ -78,7 +144,7 @@
 			</array>
 		</dict>
 	</dict>
-	<key>COLLADGE PHOTO FRAME</key>
+	<key>COLLAGED PHOTO FRAMES</key>
 	<dict>
 		<key>backImage</key>
 		<string>colladgePhotoFrame</string>
@@ -94,7 +160,7 @@
 			</array>
 		</dict>
 	</dict>
-	<key>T SHIRT PRINTING</key>
+	<key>T-SHIRT PRINTING</key>
 	<dict>
 		<key>backImage</key>
 		<string>tShirtPrint</string>
@@ -142,7 +208,7 @@
 			</array>
 		</dict>
 	</dict>
-	<key>CUSIONS PRINTED</key>
+	<key>CUSHIONS PRINTED</key>
 	<dict>
 		<key>backImage</key>
 		<string>cushionsPrinted</string>
@@ -158,7 +224,7 @@
 			</array>
 		</dict>
 	</dict>
-	<key>TOTE BAG PRINTED</key>
+	<key>TOTE BAGS PRINTED</key>
 	<dict>
 		<key>backImage</key>
 		<string>toteBagsPrinted</string>

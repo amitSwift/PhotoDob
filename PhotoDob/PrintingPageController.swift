@@ -25,9 +25,28 @@ class PrintingPageController: UIViewController ,UICollectionViewDelegate,UIColle
     @IBOutlet var infoView: UIView!
     @IBOutlet var customSizeView: UIView!
     
+    
+    @IBOutlet var btnCustomSize: UIButton!
+    @IBOutlet var btnSelectSize: UIButton!
+    
+    @IBOutlet var infoBackGroundImage: UIImageView!
+    @IBOutlet var cusumSizeBackGroundImage: UIImageView!
+    
+    @IBOutlet var txtWidthCustomView: UITextField!
+    @IBOutlet var txtHeightCustomView: UITextField!
+    
+    
+    //MARK: Variables
+    
+    var imageWidth = String()
+    var imageHeight = String()
+    
     var screenSize: CGRect!
     var screenWidth: CGFloat!
     var screenHeight: CGFloat!
+    
+    var productType = String()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +55,11 @@ class PrintingPageController: UIViewController ,UICollectionViewDelegate,UIColle
         screenSize = UIScreen.main.bounds
         screenWidth = screenSize.width
         screenHeight = screenSize.height
+        
+        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(PrintingPageController.longPressedLeft))
+        lblSize.addGestureRecognizer(tapRecognizer)
+        lblSize.isUserInteractionEnabled = true
         
         // Do any additional setup after loading the view, typically from a nib
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
@@ -52,23 +76,23 @@ class PrintingPageController: UIViewController ,UICollectionViewDelegate,UIColle
         
         
         if DeviceType.IS_IPHONE_6{
-            collectionView.frame = CGRect(x: 0, y: 64, width: Int(self.view.frame.size.width), height: 278)
-            pageControler.frame = CGRect(x: Int(self.view.frame.size.width)/2-20, y: 250, width: Int(pageControler.frame.size.width), height: Int(pageControler.frame.size.height))
+            collectionView.frame = CGRect(x: 0, y: 64, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.width))
+            pageControler.frame = CGRect(x: Int(self.view.frame.size.width)/2-20, y: Int(self.view.frame.size.width)+30, width: Int(pageControler.frame.size.width), height: Int(pageControler.frame.size.height))
             
         }
         else  if DeviceType.IS_IPHONE_6P{
-            collectionView.frame = CGRect(x: 0, y: 64, width: Int(self.view.frame.size.width), height: 278)
-            pageControler.frame = CGRect(x: Int(self.view.frame.size.width)/2-20, y: 290, width: Int(pageControler.frame.size.width), height: Int(pageControler.frame.size.height))
+            collectionView.frame = CGRect(x: 0, y: 64, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.width))
+            pageControler.frame = CGRect(x: Int(self.view.frame.size.width)/2-20, y: Int(self.view.frame.size.width)+30, width: Int(pageControler.frame.size.width), height: Int(pageControler.frame.size.height))
             
         }
         else  if DeviceType.IS_IPHONE_5{
-            collectionView.frame = CGRect(x: 0, y: 64, width: Int(self.view.frame.size.width), height: 258)
-            pageControler.frame = CGRect(x: Int(self.view.frame.size.width)/2-20, y: 190, width: Int(pageControler.frame.size.width), height: Int(pageControler.frame.size.height))
+            collectionView.frame = CGRect(x: 0, y: 64, width: Int(self.view.frame.size.width), height: 280)
+            pageControler.frame = CGRect(x: Int(self.view.frame.size.width)/2-20, y: 280+20, width: Int(pageControler.frame.size.width), height: Int(pageControler.frame.size.height))
             
         }
         else  if DeviceType.IS_IPHONE_4_OR_LESS{
-            collectionView.frame = CGRect(x: 0, y: 64, width: Int(self.view.frame.size.width), height: 258)
-            pageControler.frame = CGRect(x: Int(self.view.frame.size.width)/2-20, y: 190, width: Int(pageControler.frame.size.width), height: Int(pageControler.frame.size.height))
+            collectionView.frame = CGRect(x: 0, y: 64, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.width))
+            pageControler.frame = CGRect(x: Int(self.view.frame.size.width)/2-20, y: Int(self.view.frame.size.width)+30, width: Int(pageControler.frame.size.width), height: Int(pageControler.frame.size.height))
             
         }
         
@@ -81,7 +105,7 @@ class PrintingPageController: UIViewController ,UICollectionViewDelegate,UIColle
         //uork on page controller
         pageControler.numberOfPages = 4
         pageControler.currentPage = 0
-        pageControler.center = self.view.center
+        //pageControler.center = self.view.center
         
         
         self.view.bringSubview(toFront: pageControler)
@@ -93,15 +117,43 @@ class PrintingPageController: UIViewController ,UICollectionViewDelegate,UIColle
         
         
         //add right navigation  button
-        var imageInfo = UIImage(named: "question-mark")
+       /* var imageInfo = UIImage(named: "question-mark")
         imageInfo = imageInfo?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: imageInfo, style: UIBarButtonItemStyle.plain, target: self, action: #selector(PrintingPageController.showInfoView))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: imageInfo, style: UIBarButtonItemStyle.plain, target: self, action: #selector(PrintingPageController.showInfoView))*/
         
-        self.showInfoView()
+        
+        
+     
+        //self.showInfoView()
+        self.rollerBlinderValidation()
+        
+        
+        
+        
+        
+        
+        
+        let tapgestureInfo = UITapGestureRecognizer(target: self, action: #selector(PrintingPageController.tapGestureInfoView))
+        infoBackGroundImage.addGestureRecognizer(tapgestureInfo)
+        
+        let tapgestureCustom = UITapGestureRecognizer(target: self, action: #selector(PrintingPageController.tapGestureCustomView))
+        cusumSizeBackGroundImage.addGestureRecognizer(tapgestureCustom)
+        
+        
         
         
         // Do any additional setup after loading the view.
     }
+    
+    func tapGestureInfoView()
+    {
+        infoView.removeFromSuperview()
+    }
+    
+    func tapGestureCustomView() {
+        customSizeView.removeFromSuperview()
+    }
+
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = false
@@ -114,11 +166,95 @@ class PrintingPageController: UIViewController ,UICollectionViewDelegate,UIColle
     
     func showInfoView() {
         
+        let alert = UIAlertController(title: "Alert", message: "Under process!", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+
+        
+       /* infoView.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+        self.view.addSubview(infoView)*/
+    }
+    func longPressedLeft(sender: UILongPressGestureRecognizer)
+    {
         infoView.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height)
         self.view.addSubview(infoView)
     }
     
+    func rollerBlinderValidation(){
+        
+        if UserDefaults.standard.bool(forKey: "isCustomSize") == false
+        {
+            
+            if UserDefaults.standard.value(forKey: "selectedSizeRoller") != nil{
+                
+                if UserDefaults.standard.value(forKey: "selectedSizeRoller")as! String == "0"{
+                    imageWidth = "20"
+                    imageHeight = "30"
+                    
+                    btn20x30.isSelected = true
+                    
+                }else if UserDefaults.standard.value(forKey: "selectedSizeRoller")as! String == "1"{
+                    
+                    imageWidth = "40"
+                    imageHeight = "60"
+                    btn40x60.isSelected = true
+                }
+                else if UserDefaults.standard.value(forKey: "selectedSizeRoller")as! String == "2"{
+                    
+                    imageWidth = "70"
+                    imageHeight = "80"
+                    btn70x80.isSelected = true
+                }
+                else if UserDefaults.standard.value(forKey: "selectedSizeRoller")as! String == "3"{
+                    
+                    imageWidth = "70"
+                    imageHeight = "90"
+                    btn70x90.isSelected = true
+                }
+                
+            }
+            else{
+                UserDefaults.standard.set("1", forKey: "selectedSizeRoller")
+                imageWidth = "40"
+                imageHeight = "60"
+                btn40x60.isSelected = true
+                
+            }
+            
+            Header.appDelegate.imageWidthForCrop = imageWidth //give width for croping
+            Header.appDelegate.imageHeightForCrop = imageHeight //give height for croping
+            
+            UserDefaults.standard.set(imageHeight, forKey: "imageHeightForCrop")
+            UserDefaults.standard.set(imageWidth, forKey: "imageWidthForCrop")
+            
+            UserDefaults.standard.set(false, forKey: "isPrintCustomSize")
+            
+            lblSize.text = "\(imageWidth)x\(imageHeight)"
+            Header.appDelegate.SizeName = lblSize.text!
+            
+            
+        }
+        else{
+            infoView.removeFromSuperview()
+            
+            imageWidth = UserDefaults.standard.value(forKey: "imageWidthForCrop") as! String
+            imageHeight = UserDefaults.standard.value(forKey: "imageHeightForCrop") as! String
+            
+            Header.appDelegate.imageWidthForCrop = imageWidth //give width for croping
+            Header.appDelegate.imageHeightForCrop = imageHeight //give height for croping
+            
+            
+            lblSize.text = "\(imageWidth)x\(imageHeight)"
+            Header.appDelegate.SizeName = lblSize.text!
+        }
+        
+
+    }
+    
+    
     @IBAction func sizeRadioBtnAction(_ sender: UIButton) {
+        
+       
         
         if sender.tag == 0 {
             if btn20x30.isSelected == true {
@@ -126,13 +262,22 @@ class PrintingPageController: UIViewController ,UICollectionViewDelegate,UIColle
                 btn40x60.isSelected = false
                 btn70x80.isSelected = false
                 btn70x90.isSelected = false
+                
+                
+                
             }
             else{
                 btn20x30.isSelected = true
                 btn40x60.isSelected = false
                 btn70x80.isSelected = false
                 btn70x90.isSelected = false
+                 UserDefaults.standard.set("0", forKey: "selectedSizeRoller")
             }
+            
+            imageWidth = "20"
+            imageHeight = "30"
+            lblSize.text = "20x30"
+            
         }
         else if sender.tag == 1{
             if btn40x60.isSelected == true {
@@ -146,7 +291,11 @@ class PrintingPageController: UIViewController ,UICollectionViewDelegate,UIColle
                 btn20x30.isSelected = false
                 btn70x80.isSelected = false
                 btn70x90.isSelected = false
+                UserDefaults.standard.set("1", forKey: "selectedSizeRoller")
             }
+            imageWidth = "40"
+            imageHeight = "60"
+            lblSize.text = "40x60"
         }
         else if sender.tag == 2{
             if btn70x80.isSelected == true {
@@ -160,7 +309,11 @@ class PrintingPageController: UIViewController ,UICollectionViewDelegate,UIColle
                 btn20x30.isSelected = false
                 btn40x60.isSelected = false
                 btn70x90.isSelected = false
+                UserDefaults.standard.set("2", forKey: "selectedSizeRoller")
             }
+            imageWidth = "70"
+            imageHeight = "80"
+            lblSize.text = "70x80"
         }
         else if sender.tag == 3{
             if btn70x90.isSelected == true {
@@ -174,8 +327,23 @@ class PrintingPageController: UIViewController ,UICollectionViewDelegate,UIColle
                 btn20x30.isSelected = false
                 btn40x60.isSelected = false
                 btn70x80.isSelected = false
+                 UserDefaults.standard.set("3", forKey: "selectedSizeRoller")
             }
+            imageWidth = "70"
+            imageHeight = "90"
+            lblSize.text = "70x90"
         }
+        
+        Header.appDelegate.SizeName = lblSize.text! // give size name
+        
+        
+        Header.appDelegate.imageWidthForCrop = imageWidth //give width for croping
+        Header.appDelegate.imageHeightForCrop = imageHeight //give height for croping
+        UserDefaults.standard.set(imageHeight, forKey: "imageHeightForCrop")
+        UserDefaults.standard.set(imageWidth, forKey: "imageWidthForCrop")
+        
+        infoView.removeFromSuperview()
+        UserDefaults.standard.set(false, forKey: "isCustomSize")
 
     }
     
@@ -191,12 +359,121 @@ class PrintingPageController: UIViewController ,UICollectionViewDelegate,UIColle
     }
     
     
+    @IBAction func selectSizeAction(_ sender: AnyObject) {
+    }
     
     @IBAction func makeRollerAction(_ sender: AnyObject) {
         
-        let printingAlbumVC = storyBoard.instantiateViewController(withIdentifier: "PrintingAlbumVC") as! PrintingAlbumVC
-        self.navigationController?.pushViewController(printingAlbumVC, animated: true)
+        
+        
+        if(UserDefaults.standard.value(forKey: "ProductName") != nil){
+            
+            if(Header.appDelegate.ProductName != UserDefaults.standard.value(forKey: "ProductName") as! String  ){
+                
+                self.productNameValidation()
+            }
+            else if(Header.appDelegate.SizeName != UserDefaults.standard.value(forKey: "SizeName") as! String){
+                self.sizeOfProductValidation()
+            }
+            else{
+                let printingAlbumVC = storyBoard.instantiateViewController(withIdentifier: "PrintingAlbumVC") as! PrintingAlbumVC
+                self.navigationController?.pushViewController(printingAlbumVC, animated: true)
+                
+            }
+        }
+            
+            
+        else if(UserDefaults.standard.value(forKey: "SizeName") != nil){
+            
+            if(Header.appDelegate.SizeName != UserDefaults.standard.value(forKey: "SizeName") as! String){
+                
+                self.sizeOfProductValidation()
+            }
+            else{
+                let printingAlbumVC = storyBoard.instantiateViewController(withIdentifier: "PrintingAlbumVC") as! PrintingAlbumVC
+                self.navigationController?.pushViewController(printingAlbumVC, animated: true)
+                
+                
+            }
+            
+        }
+            
+        else{
+            let printingAlbumVC = storyBoard.instantiateViewController(withIdentifier: "PrintingAlbumVC") as! PrintingAlbumVC
+            self.navigationController?.pushViewController(printingAlbumVC, animated: true)
+            
+        }
+        
+
+        
+        
+        
+        
     }
+    
+    
+    
+    func productNameValidation()
+    {
+        let alert = UIAlertController(title: "Alert", message: "You currently have \(UserDefaults.standard.value(forKey: "ProductName") as! String) selected.Are you sure want to change to \(Header.appDelegate.ProductName) Prints?", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil));
+        //event handler with closure
+        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: {(action:UIAlertAction) in
+            
+            
+            
+            //need to work for remove saved value in database
+            let arr = DBManager.sharedManager.fetchImagesByProductNameFromDB(UserDefaults.standard.value(forKey: "ProductName") as! String)//remove value from database by size when changed size
+            print(arr)
+            DBManager.sharedManager.deleteRecordsFromDB(arr)
+            
+            UserDefaults.standard.removeObject(forKey: "ProductName")
+            UserDefaults.standard.removeObject(forKey: "SizeName")
+            UserDefaults.standard.removeObject(forKey: "indexValueForTshirt")
+            
+            
+            let printingAlbumVC = storyBoard.instantiateViewController(withIdentifier: "PrintingAlbumVC") as! PrintingAlbumVC
+            self.navigationController?.pushViewController(printingAlbumVC, animated: true)
+            
+            
+        }))
+        
+        self.present(alert, animated: true, completion: nil)
+        
+        
+    }
+    
+    func sizeOfProductValidation()
+    {
+        let alert = UIAlertController(title: "Alert", message: "You currently have \(UserDefaults.standard.value(forKey: "SizeName") as! String) selected.Are you sure want to change to \(Header.appDelegate.SizeName) Prints?", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil));
+        //event handler with closure
+        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: {(action:UIAlertAction) in
+            
+            
+            
+            //need to work for remove saved value in database
+            let arr = DBManager.sharedManager.fetchImagesBySizeFromDB(UserDefaults.standard.value(forKey: "SizeName") as! String)//remove value from database by size when changed size
+            print(arr)
+            DBManager.sharedManager.deleteRecordsFromDB(arr)
+            
+            //UserDefaults.standard.removeObject(forKey: "SizeName")
+            UserDefaults.standard.set(Header.appDelegate.SizeName, forKey: "SizeName")
+            UserDefaults.standard.removeObject(forKey: "indexValueForTshirt")
+            
+            let printingAlbumVC = storyBoard.instantiateViewController(withIdentifier: "PrintingAlbumVC") as! PrintingAlbumVC
+            self.navigationController?.pushViewController(printingAlbumVC, animated: true)
+            
+            
+        }))
+        
+        self.present(alert, animated: true, completion: nil)
+        
+        
+    }
+
+    
+    
     
     
     override func didReceiveMemoryWarning() {
@@ -214,10 +491,15 @@ class PrintingPageController: UIViewController ,UICollectionViewDelegate,UIColle
     {
         let pCell = collectionView.dequeueReusableCell(withReuseIdentifier: pageCell, for: indexPath) as! PagecontrollerCell
         
-        let imageName = "image"
+        let imageName = "aluminium-roler-image"
         let image = UIImage(named: imageName)
         let imageView = UIImageView(image: image!)
-        imageView.frame = CGRect(x: 0, y: -54, width: Int(self.view.frame.size.width), height: 278)
+         if DeviceType.IS_IPHONE_5{
+            imageView.frame = CGRect(x: 0, y: -64, width: Int(self.view.frame.size.width), height: 280)
+         }else{
+            imageView.frame = CGRect(x: 0, y: -100, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.width))
+        }
+        
         pCell.contentView.addSubview(imageView)
         
         
@@ -257,8 +539,43 @@ class PrintingPageController: UIViewController ,UICollectionViewDelegate,UIColle
         
     }
     @IBAction func doneAction(_ sender: AnyObject) {
-        infoView.removeFromSuperview()
-        customSizeView.removeFromSuperview()
+        
+        if txtWidthCustomView.text == ""{
+            let alert = UIAlertController(title: "Alert", message: "Please fill Width.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.cancel, handler: nil));
+           
+            self.present(alert, animated: true, completion: nil)
+            
+        }else if txtHeightCustomView.text == ""{
+            let alert = UIAlertController(title: "Alert", message: "Please fill Height.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.cancel, handler: nil));
+            
+            self.present(alert, animated: true, completion: nil)
+        }else{
+            
+            UserDefaults.standard.set(true, forKey: "isCustomSize")
+            
+            infoView.removeFromSuperview()
+            customSizeView.removeFromSuperview()
+            
+            btn20x30.isSelected = false
+            btn40x60.isSelected = false
+            btn70x80.isSelected = false
+            btn70x90.isSelected = false
+            
+            imageWidth = txtWidthCustomView.text!
+            imageHeight = txtHeightCustomView.text!
+            
+            Header.appDelegate.imageWidthForCrop = imageWidth //give width for croping
+            Header.appDelegate.imageHeightForCrop = imageHeight //give height for croping
+            UserDefaults.standard.set(imageHeight, forKey: "imageHeightForCrop")
+            UserDefaults.standard.set(imageWidth, forKey: "imageWidthForCrop")
+            
+            lblSize.text = "\(txtWidthCustomView.text!)x\(txtHeightCustomView.text!)"
+            Header.appDelegate.SizeName = lblSize.text!
+        }
+        
+       
     }
 
     /*

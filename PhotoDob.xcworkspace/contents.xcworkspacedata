@@ -4,6 +4,16 @@
    <FileRef
       location = "group:PhotoDob.xcodeproj">
    </FileRef>
+   <Group
+      location = "group:PhotoDobTests"
+      name = "PhotoDobTests">
+      <FileRef
+         location = "group:PhotoDobTests/PhotoDobTests.swift">
+      </FileRef>
+      <FileRef
+         location = "group:PhotoDobTests/Info.plist">
+      </FileRef>
+   </Group>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>

@@ -19,13 +19,21 @@ class PageControllerVC: UIViewController ,UICollectionViewDelegate,UICollectionV
     
     @IBOutlet var infoView: UIView!
     
+    @IBOutlet var lblPrice: UILabel!
+    
+    
+    //MARK: variable
+    var imageWidth = String()
+    var imageHeight = String()
+    
+    
     var screenSize: CGRect!
     var screenWidth: CGFloat!
     var screenHeight: CGFloat!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "4x4 Square"
+        self.title = Header.appDelegate.SizeName //give size as title
         
         screenSize = UIScreen.main.bounds
         screenWidth = screenSize.width
@@ -46,30 +54,42 @@ class PageControllerVC: UIViewController ,UICollectionViewDelegate,UICollectionV
         
         
         if DeviceType.IS_IPHONE_6{
-            collectionView.frame = CGRect(x: 0, y: 64, width: Int(self.view.frame.size.width), height: 278)
-            lblSize.frame = CGRect(x: 0, y: 278+64, width: Int(self.view.frame.size.width), height: Int(lblSize.frame.size.height))
-            pageControler.frame = CGRect(x: Int(self.view.frame.size.width)/2-20, y: 250, width: Int(pageControler.frame.size.width), height: Int(pageControler.frame.size.height))
+            collectionView.frame = CGRect(x: 0, y: 64, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.width)-64)
+            lblSize.frame = CGRect(x: 0, y: Int(self.view.frame.size.width), width: Int(self.view.frame.size.width), height: Int(lblSize.frame.size.height))
+            pageControler.frame = CGRect(x: Int(self.view.frame.size.width)/2-20, y: Int(self.view.frame.size.width)-40, width: Int(pageControler.frame.size.width), height: Int(pageControler.frame.size.height))
+            lblPrice.frame = CGRect(x: 105, y: 513, width: 164, height: 21)
 
         }
         else  if DeviceType.IS_IPHONE_6P{
-            collectionView.frame = CGRect(x: 0, y: 64, width: Int(self.view.frame.size.width), height: 278)
-            lblSize.frame = CGRect(x: 0, y: 290+64, width: Int(self.view.frame.size.width), height: Int(lblSize.frame.size.height))
-            pageControler.frame = CGRect(x: Int(self.view.frame.size.width)/2-20, y: 290, width: Int(pageControler.frame.size.width), height: Int(pageControler.frame.size.height))
+            collectionView.frame = CGRect(x: 0, y: 64, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.width)-64)
+            lblSize.frame = CGRect(x: 0, y: Int(self.view.frame.size.width), width: Int(self.view.frame.size.width), height: Int(lblSize.frame.size.height))
+            pageControler.frame = CGRect(x: Int(self.view.frame.size.width)/2-20, y: Int(self.view.frame.size.width)-40, width: Int(pageControler.frame.size.width), height: Int(pageControler.frame.size.height))
+            lblPrice.frame = CGRect(x: 120, y: 567, width: 164, height: 21)
             
         }
         else  if DeviceType.IS_IPHONE_5{
-            collectionView.frame = CGRect(x: 0, y: 64, width: Int(self.view.frame.size.width), height: 258)
-            lblSize.frame = CGRect(x: 0, y: 258+64, width: Int(self.view.frame.size.width), height: Int(lblSize.frame.size.height))
-            pageControler.frame = CGRect(x: Int(self.view.frame.size.width)/2-20, y: 190, width: Int(pageControler.frame.size.width), height: Int(pageControler.frame.size.height))
+            collectionView.frame = CGRect(x: 0, y: 64, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.width)-64)
+            lblSize.frame = CGRect(x: 0, y: Int(self.view.frame.size.width), width: Int(self.view.frame.size.width), height: Int(lblSize.frame.size.height))
+            pageControler.frame = CGRect(x: Int(self.view.frame.size.width)/2-20, y: Int(self.view.frame.size.width)-40, width: Int(pageControler.frame.size.width), height: Int(pageControler.frame.size.height))
+            lblPrice.frame = CGRect(x: 78, y: 440, width: 164, height: 21)
             
         }
         else  if DeviceType.IS_IPHONE_4_OR_LESS{
-            collectionView.frame = CGRect(x: 0, y: 64, width: Int(self.view.frame.size.width), height: 258)
-            lblSize.frame = CGRect(x: 0, y: 258+64, width: Int(self.view.frame.size.width), height: Int(lblSize.frame.size.height))
-            pageControler.frame = CGRect(x: Int(self.view.frame.size.width)/2-20, y: 190, width: Int(pageControler.frame.size.width), height: Int(pageControler.frame.size.height))
+            collectionView.frame = CGRect(x: 0, y: 64, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.width)-64)
+            lblSize.frame = CGRect(x: 0, y: Int(self.view.frame.size.width), width: Int(self.view.frame.size.width), height: Int(lblSize.frame.size.height))
+            pageControler.frame = CGRect(x: Int(self.view.frame.size.width)/2-20, y: Int(self.view.frame.size.width)-40, width: Int(pageControler.frame.size.width), height: Int(pageControler.frame.size.height))
             
         }
         
+        Header.appDelegate.imageWidthForCrop = imageWidth //give width for croping
+        Header.appDelegate.imageHeightForCrop = imageHeight //give height for croping
+        print(imageWidth)
+        print(imageHeight)
+        
+        UserDefaults.standard.set(imageHeight, forKey: "imageHeightForCrop")
+        UserDefaults.standard.set(imageWidth, forKey: "imageWidthForCrop")
+        
+        lblSize.text = "\(imageWidth)X\(imageHeight) CM"
         
         collectionView.isPagingEnabled = true
         self.view.addSubview(collectionView!)
@@ -79,7 +99,7 @@ class PageControllerVC: UIViewController ,UICollectionViewDelegate,UICollectionV
         //uork on page controller
         pageControler.numberOfPages = 4
         pageControler.currentPage = 0
-        pageControler.center = self.view.center
+        //pageControler.center = self.view.center
         
         
         self.view.bringSubview(toFront: pageControler)
@@ -134,7 +154,7 @@ class PageControllerVC: UIViewController ,UICollectionViewDelegate,UICollectionV
         let imageName = "4x4-image"
         let image = UIImage(named: imageName)
         let imageView = UIImageView(image: image!)
-        imageView.frame = CGRect(x: 0, y: -54, width: Int(self.view.frame.size.width), height: 278)
+        imageView.frame = CGRect(x: 0, y: -80, width: Int(self.view.frame.size.width), height: Int(self.view.frame.size.width))
         pCell.contentView.addSubview(imageView)
        
         
@@ -154,8 +174,45 @@ class PageControllerVC: UIViewController ,UICollectionViewDelegate,UICollectionV
     
     @IBAction func selectAction(_ sender: AnyObject) {
         
-        let albumVC = storyBoard.instantiateViewController(withIdentifier: "AlbumVC") as! AlbumVC
-        self.navigationController?.pushViewController(albumVC, animated: true)
+        if(UserDefaults.standard.value(forKey: "ProductName") != nil){
+            
+            if(Header.appDelegate.ProductName != UserDefaults.standard.value(forKey: "ProductName") as! String  ){
+                
+                self.productNameValidation()
+            }
+            else if(Header.appDelegate.SizeName != UserDefaults.standard.value(forKey: "SizeName") as! String){
+                self.sizeOfProductValidation()
+            }
+            else{
+                let albumVC = storyBoard.instantiateViewController(withIdentifier: "AlbumVC") as! AlbumVC
+                self.navigationController?.pushViewController(albumVC, animated: true)
+                
+                
+            }
+        }
+        
+        
+       else if(UserDefaults.standard.value(forKey: "SizeName") != nil){
+            
+            if(Header.appDelegate.SizeName != UserDefaults.standard.value(forKey: "SizeName") as! String){
+                
+                self.sizeOfProductValidation()
+            }
+            else{
+                let albumVC = storyBoard.instantiateViewController(withIdentifier: "AlbumVC") as! AlbumVC
+                self.navigationController?.pushViewController(albumVC, animated: true)
+
+                
+            }
+            
+        }
+            
+        else{
+            let albumVC = storyBoard.instantiateViewController(withIdentifier: "AlbumVC") as! AlbumVC
+            self.navigationController?.pushViewController(albumVC, animated: true)
+
+        }
+
         
     }
     
@@ -165,7 +222,64 @@ class PageControllerVC: UIViewController ,UICollectionViewDelegate,UICollectionV
     }
     
    
+ func productNameValidation()
+ {
+    let alert = UIAlertController(title: "Alert", message: "You currently have \(UserDefaults.standard.value(forKey: "ProductName") as! String) selected.Are you sure want to change to \(Header.appDelegate.SizeName) Prints?", preferredStyle: UIAlertControllerStyle.alert)
+    alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil));
+    //event handler with closure
+    alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: {(action:UIAlertAction) in
+        
+        
+        
+        //need to work for remove saved value in database
+        let arr = DBManager.sharedManager.fetchImagesByProductNameFromDB(UserDefaults.standard.value(forKey: "ProductName") as! String)//remove value from database by size when changed size
+        print(arr)
+        DBManager.sharedManager.deleteRecordsFromDB(arr)
+        
+        UserDefaults.standard.removeObject(forKey: "ProductName")
+        UserDefaults.standard.removeObject(forKey: "SizeName")
+        UserDefaults.standard.removeObject(forKey: "indexValueForTshirt")
+        
+        
+        let albumVC = storyBoard.instantiateViewController(withIdentifier: "AlbumVC") as! AlbumVC
+        self.navigationController?.pushViewController(albumVC, animated: true)
+        
+        
+    }))
+    
+    self.present(alert, animated: true, completion: nil)
 
+    
+    }
+    
+    func sizeOfProductValidation()
+    {
+        let alert = UIAlertController(title: "Alert", message: "You currently have \(UserDefaults.standard.value(forKey: "SizeName") as! String) selected.Are you sure want to change to \(Header.appDelegate.SizeName) Prints?", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil));
+        //event handler with closure
+        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: {(action:UIAlertAction) in
+            
+            
+            
+            //need to work for remove saved value in database
+            let arr = DBManager.sharedManager.fetchImagesBySizeFromDB(UserDefaults.standard.value(forKey: "SizeName") as! String)//remove value from database by size when changed size
+            print(arr)
+            DBManager.sharedManager.deleteRecordsFromDB(arr)
+            
+            //UserDefaults.standard.removeObject(forKey: "SizeName")
+            UserDefaults.standard.set(Header.appDelegate.SizeName, forKey: "SizeName")
+            UserDefaults.standard.removeObject(forKey: "indexValueForTshirt")
+            
+            let albumVC = storyBoard.instantiateViewController(withIdentifier: "AlbumVC") as! AlbumVC
+            self.navigationController?.pushViewController(albumVC, animated: true)
+            
+            
+        }))
+        
+        self.present(alert, animated: true, completion: nil)
+
+        
+    }
     
 
     /*
